@@ -18,6 +18,8 @@ import org.word.utils.RequestUtils;
 import org.word.utils.ResponseUtils;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -247,7 +249,7 @@ public class OpenApiWordServiceImpl implements OpenApiWordService {
 
                 Map<String, String> schema1 = (Map) param.get("schema");
 
-                request.setType(schema1 == null ? " " : schema1.get("type").toString());
+                request.setType(schema1 == null ? " " : schema1.get("type"));
                 // request.setType(param.get("type") == null ? "object" : param.get("type").toString());
                 if (param.get("format") != null) {
                     request.setType(request.getType() + "(" + param.get("format") + ")");
@@ -371,7 +373,10 @@ public class OpenApiWordServiceImpl implements OpenApiWordService {
                     }
                 }
             } else {
-                String ref = String.valueOf(statusCodeInfo.get("$ref"));
+                String ref = "";
+                if(null != statusCodeInfo.get("$ref")){
+                    ref = String.valueOf(statusCodeInfo.get("$ref"));
+                }
 
                 if (ref != "") {
                     ModelAttr modelAttr = definitinMap.get(ref);
